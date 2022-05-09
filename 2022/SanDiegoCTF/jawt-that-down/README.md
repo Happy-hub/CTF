@@ -39,7 +39,7 @@ login()
 resp = sess.get(url + "s")
 print(resp.text)
 ```
-The output was ```d```, and after a moment of thinking what could that mean, I came with an idea that maybe we need to iterate through the directories and assemble the flag that way.
+The output was ```d```, and after a moment of thinking what could that mean, I came up with an idea that maybe we need to iterate through the directories and assemble the flag that way.
 I tried to access the next directory ```https://jawt.sdc.tf/d```, but that just gave ```Not Found```, so after another moment of thinking, I tried different cominations until I found something that worked - ```https://jawt.sdc.tf/s/d```, and because the token expired after two seconds, my script couldn't assemble the full flag in time, so I just logged in again when I got the ```Access Denied``` message.
 
 here is the full script:
