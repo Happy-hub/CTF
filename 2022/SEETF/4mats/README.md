@@ -2,9 +2,11 @@
 # 4mats
 
 ## Challenge Description
->Lets get to know each other
-`nc fun.chall.seetf.sg 50001`
-For beginners: -   [https://ctf101.org/binary-exploitation/what-is-a-format-string-vulnerability/](https://ctf101.org/binary-exploitation/what-is-a-format-string-vulnerability/)
+> Lets get to know each other 
+>
+> `nc fun.chall.seetf.sg 50001`
+>
+> For beginners: -   [https://ctf101.org/binary-exploitation/what-is-a-format-string-vulnerability/](https://ctf101.org/binary-exploitation/what-is-a-format-string-vulnerability/)
 
 ## Solution
 We are given two files, the executable and it's source code -> `vuln`, `vuln.c`
@@ -109,9 +111,12 @@ printf("too!\n");
 ```
 
 now what can we achieve with that?
+
 We see that the flag is printed only when you guess the program's favorite number, so that means we need to use the string format vulnerability to leak out values from the stack, because the variable `fav_num` is stored on the stack.
+
 But that is not enough, because each time we try to guess the favorite number, it generates a new favorite number :( .
 However, the code is split to labels, and we see that we have a label that skips the generation of a random number, and directly asks what is the favorite number, that label is `mat4`.
+
 To reach that label, we need to increase the variable `set` to `4` and then enter an invalid option that is not covered in the switch case, so we can reach the default section which jumps to different labels:
 ```c
 default:
@@ -181,6 +186,7 @@ Not even close!
 ```
 
 now `set = 4`, and we can use the format string vulnerability to leak out the favorite number from the stack.
+
 We will use `%d` specifier because we are looking for a number, `printf` will look for a value on the stack and convert it to a decimal integer.
 ```
 Let's get to know each other!
@@ -194,7 +200,10 @@ Same! I love
 too!
 ```
 
-Success! we leaked values from the stack, now we know the favorite number must be below `1000000`, because of the modulo -> `int fav_num = rand() % 1000000;`.
+Success! we leaked values from the stack, now we know the favorite number must be below `1000000`, because of the modulo:
+
+`int fav_num = rand() % 1000000;`.
+
 I checked this multiple times, and the numbers `64` and `1` stay the same every run, so the favorite number must be `983906`.
 
 Now that we've got the favorite number, we can enter an invalid option to enter the default case, and jump to label `mat4`, there we can enter the number we found:
